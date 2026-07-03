@@ -1,0 +1,10 @@
+pdfplumber
+pymupdf
+pandas
+pydantic
+typer
+rich
+jsonschema
+pytest
+openpyxl
+pyyaml
