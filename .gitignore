@@ -7,6 +7,9 @@ __pycache__/
 # Virtual environment
 .venv/
 
+# Input PDFs
+input/
+
 # VS Code
 .vscode/
 
@@ -20,7 +23,7 @@ build/
 
 # Windows
 Thumbs.db
-
+.
 # macOS
 .DS_Store
 
