@@ -24,7 +24,7 @@ class PDFReader:
             file_name=pdf_path.split("\\")[-1],
             page_count=document.page_count,
             title=metadata.get("title"),
-            author=metadata.get("author"),0
+            author=metadata.get("author"),
             creator=metadata.get("creator"),
             producer=metadata.get("producer"),
         )
