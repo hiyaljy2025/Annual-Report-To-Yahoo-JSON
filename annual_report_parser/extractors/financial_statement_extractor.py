@@ -1,5 +1,6 @@
 from annual_report_parser.config_loader import ConfigLoader
 from annual_report_parser.models.financial_statement import FinancialStatement
+from annual_report_parser.models.statement_page import StatementPage
 
 
 class FinancialStatementExtractor:
@@ -38,21 +39,39 @@ class FinancialStatementExtractor:
                 self.keywords["income_statement"],
             ):
                 print(f"Found Income Statement on page {page.number}")
-                income.append(page)
+
+                income.append(
+                    StatementPage(
+                        statement_type="income_statement",
+                        page=page,
+                    )
+                )
 
             elif self.contains_keyword(
                 text,
                 self.keywords["balance_sheet"],
             ):
                 print(f"Found Balance Sheet on page {page.number}")
-                balance.append(page)
+
+                balance.append(
+                    StatementPage(
+                        statement_type="balance_sheet",
+                        page=page,
+                    )
+                )
 
             elif self.contains_keyword(
                 text,
                 self.keywords["cash_flow"],
             ):
                 print(f"Found Cash Flow Statement on page {page.number}")
-                cash.append(page)
+
+                cash.append(
+                    StatementPage(
+                        statement_type="cash_flow",
+                        page=page,
+                    )
+                )
 
         return FinancialStatement(
             income_statement=income,
