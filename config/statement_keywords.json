@@ -1,0 +1,23 @@
+{
+    "income_statement": [
+        "income statement",
+        "statement of profit or loss",
+        "statement of comprehensive income",
+        "consolidated statement of profit or loss",
+        "consolidated statement of comprehensive income"
+    ],
+
+    "balance_sheet": [
+        "statement of financial position",
+        "balance sheet",
+        "consolidated statement of financial position",
+        "consolidated balance sheet"
+    ],
+
+    "cash_flow": [
+        "cash flow statement",
+        "statement of cash flows",
+        "consolidated statement of cash flows",
+        "consolidated cash flow statement"
+    ]
+}
