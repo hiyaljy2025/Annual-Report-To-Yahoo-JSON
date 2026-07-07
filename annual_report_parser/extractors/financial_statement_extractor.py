@@ -23,6 +23,19 @@ class FinancialStatementExtractor:
                 return True
 
         return False
+    
+    def get_page_header(self, text: str, lines: int = 10) -> str:
+        """
+        Return only the first few lines of a page.
+
+        Financial statement titles almost always appear
+        near the top of the page.
+
+        """
+
+        return "\n".join(
+        text.splitlines()[:lines]
+        ).lower()
 
     def extract(self, document):
 
@@ -32,13 +45,21 @@ class FinancialStatementExtractor:
 
         for page in document.pages:
 
+            
             text = page.text
+            header = self.get_page_header(text)
 
             if self.contains_keyword(
-                text,
+                header,
                 self.keywords["income_statement"],
             ):
-                print(f"Found Income Statement on page {page.number}")
+              
+                title = header.splitlines()[0]
+
+                print(
+                    f"Found Income Statement"
+                    f"on page {page.number}: {title}"
+                )
 
                 income.append(
                     StatementPage(
@@ -48,11 +69,16 @@ class FinancialStatementExtractor:
                 )
 
             elif self.contains_keyword(
-                text,
+                header,
                 self.keywords["balance_sheet"],
             ):
-                print(f"Found Balance Sheet on page {page.number}")
+                title = header.splitlines()[0]
 
+                print( 
+                     f"Found Balance Sheet "
+                     f"on page {page.number}: {title}"
+                )
+                
                 balance.append(
                     StatementPage(
                         statement_type="balance_sheet",
@@ -61,11 +87,16 @@ class FinancialStatementExtractor:
                 )
 
             elif self.contains_keyword(
-                text,
+                header,
                 self.keywords["cash_flow"],
             ):
-                print(f"Found Cash Flow Statement on page {page.number}")
+               
+                title = header.splitlines()[0]
 
+                print(
+                     f"Found Cash Flow Statement"
+                     f"on page {page.number}: {title}"
+)
                 cash.append(
                     StatementPage(
                         statement_type="cash_flow",

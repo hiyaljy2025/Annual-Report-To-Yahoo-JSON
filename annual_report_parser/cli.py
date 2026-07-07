@@ -5,9 +5,8 @@ from rich import print
 
 from annual_report_parser.pdf_reader import PDFReader
 from annual_report_parser.inspector import Inspector
-from annual_report_parser.extractors.financial_statement_extractor import (
-    FinancialStatementExtractor,
-)
+from annual_report_parser.extractors.financial_statement_extractor import FinancialStatementExtractor
+from annual_report_parser.parsers.financial_table_parser import FinancialTableParser
 
 app = typer.Typer(
     help="Annual Report → Yahoo Finance JSON Converter"
@@ -63,6 +62,27 @@ def extract(pdf: str):
     print(f"Balance Sheet Pages    : {len(statements.balance_sheet)}")
     print(f"Cash Flow Pages        : {len(statements.cash_flow)}")
 
+    if statements.income_statement:
+
+        parser = FinancialTableParser()
+
+        table = parser.parse(
+            statements.income_statement[0]
+        )
+
+        print()
+        print("=" * 50)
+        print("[bold green]Parsed Financial Lines[/bold green]")
+        print("=" * 50)
+
+        for line in table.lines[:20]:
+
+            print()
+            print(f"[yellow]{line.label}[/yellow]")
+
+            if line.values:
+                print(f"Values : {line.values}")
 
 if __name__ == "__main__":
     app()
+

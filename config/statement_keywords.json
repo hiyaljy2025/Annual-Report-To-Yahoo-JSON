@@ -3,8 +3,11 @@
         "income statement",
         "statement of profit or loss",
         "statement of comprehensive income",
+        "statement of total return",
+        "statement of profit or loss and other comprehensive income",
         "consolidated statement of profit or loss",
-        "consolidated statement of comprehensive income"
+        "consolidated statement of comprehensive income",
+        "consolidated statement of total return"
     ],
 
     "balance_sheet": [
