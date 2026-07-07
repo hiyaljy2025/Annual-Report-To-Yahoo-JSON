@@ -31,24 +31,27 @@ class FinancialStatementExtractor:
 
         for page in document.pages:
 
-            text = page.lower()
+            text = page.text
 
             if self.contains_keyword(
                 text,
                 self.keywords["income_statement"],
             ):
+                print(f"Found Income Statement on page {page.number}")
                 income.append(page)
 
             elif self.contains_keyword(
                 text,
                 self.keywords["balance_sheet"],
             ):
+                print(f"Found Balance Sheet on page {page.number}")
                 balance.append(page)
 
             elif self.contains_keyword(
                 text,
                 self.keywords["cash_flow"],
             ):
+                print(f"Found Cash Flow Statement on page {page.number}")
                 cash.append(page)
 
         return FinancialStatement(
