@@ -16,6 +16,18 @@
         "consolidated statement of financial position",
         "consolidated balance sheet"
     ],
+    
+    "balance_sheet": [
+        "statement of financial position",
+        "statements of financial position",
+        "consolidated statement of financial position",
+        "consolidated statements of financial position",
+
+        "balance sheet",
+        "balance sheets",
+        "consolidated balance sheet",
+        "consolidated balance sheets"
+    ],
 
     "cash_flow": [
         "cash flow statement",

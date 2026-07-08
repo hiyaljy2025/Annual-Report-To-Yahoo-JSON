@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
@@ -9,4 +9,6 @@ class FinancialLine:
 
     label: str
 
-    values: list[str]
+    note: str | None = None
+
+    values: list[str] = field(default_factory=list)

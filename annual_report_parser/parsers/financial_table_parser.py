@@ -69,6 +69,47 @@ class FinancialTableParser:
 
         return True
 
+    def is_table_header(self, label: str) -> bool:
+        """
+        Returns True if the line belongs to the table header.
+        """
+
+        label = label.lower().strip()
+
+        headers = {
+            "note",
+            "group",
+            "trust",
+            "fy2025",
+            "fy2024",
+            "fy2023",
+            "2025",
+            "2024",
+            "2023",
+            "s$'000",
+            "s$",
+            "us$ million",
+        }
+
+        return label in headers
+
+    def is_table_footer(self, label: str) -> bool:
+        """
+        Returns True if the line indicates the end of the financial table.
+        """
+
+        label = label.lower().strip()
+
+        footers = (
+            "relates to",
+            "refer to",
+            "see note",
+            "the accompanying notes",
+            "the notes on pages",
+        )
+
+        return any(label.startswith(text) for text in footers)
+
     def parse(self, statement_page: StatementPage) -> FinancialTable:
 
         table = FinancialTable(
@@ -93,15 +134,18 @@ class FinancialTableParser:
                 values.insert(0, tokens.pop())
 
             label = " ".join(tokens)
-            print("---------------------------")
-            print(f"Label : {label}")
-            print(f"Values: {values}")
+            if self.is_table_footer(label):
+                break
+
+            if self.is_table_header(label):
+                continue
 
             if self.should_keep_line(label, values):
 
                 table.lines.append(
                     FinancialLine(
                         label=label,
+                        note=None,
                         values=values,
                     )
                 )
