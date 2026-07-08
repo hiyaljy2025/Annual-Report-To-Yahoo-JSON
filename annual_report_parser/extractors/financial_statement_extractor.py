@@ -12,10 +12,39 @@ class FinancialStatementExtractor:
         loader = ConfigLoader()
         self.keywords = loader.load("statement_keywords.json")
 
-    def contains_keyword(self, text: str, keywords: list[str]) -> bool:
+    def normalize_text(self, text: str) -> str:
+        """
+        Normalize extracted PDF text.
+
+        Removes whitespace so that text such as:
+
+            c o n t e n t s
+
+        becomes:
+
+            contents
+        """
+
+        return "".join(text.lower().split())
+
+    def is_contents_page(self, header: str) -> bool:
+        """
+        Returns True if this page is a table of contents.
+        """
+
+        normalized = self.normalize_text(header)
+
+        return "contents" in normalized
+
+    def contains_keyword(
+        self,
+        text: str,
+        keywords: list[str],
+    ) -> bool:
         """
         Return True if any keyword exists in the text.
         """
+
         text = text.lower()
 
         for keyword in keywords:
@@ -23,19 +52,17 @@ class FinancialStatementExtractor:
                 return True
 
         return False
-    
-    def get_page_header(self, text: str, lines: int = 10) -> str:
+
+    def get_page_header(
+        self,
+        text: str,
+        lines: int = 12,
+    ) -> str:
         """
         Return only the first few lines of a page.
-
-        Financial statement titles almost always appear
-        near the top of the page.
-
         """
 
-        return "\n".join(
-        text.splitlines()[:lines]
-        ).lower()
+        return "\n".join(text.splitlines()[:lines]).lower()
 
     def extract(self, document):
 
@@ -45,21 +72,21 @@ class FinancialStatementExtractor:
 
         for page in document.pages:
 
-            
-            text = page.text
-            header = self.get_page_header(text)
+            # Only inspect the first few lines.
+            header = self.get_page_header(page.text)
+
+            # Ignore contents pages.
+            if self.is_contents_page(header):
+                continue
 
             if self.contains_keyword(
                 header,
                 self.keywords["income_statement"],
             ):
-              
-                title = header.splitlines()[0]
 
-                print(
-                    f"Found Income Statement"
-                    f"on page {page.number}: {title}"
-                )
+                title = header.splitlines()[0] if header.splitlines() else ""
+
+                print(f"Found Income Statement " f"on page {page.number}: {title}")
 
                 income.append(
                     StatementPage(
@@ -72,13 +99,11 @@ class FinancialStatementExtractor:
                 header,
                 self.keywords["balance_sheet"],
             ):
-                title = header.splitlines()[0]
 
-                print( 
-                     f"Found Balance Sheet "
-                     f"on page {page.number}: {title}"
-                )
-                
+                title = header.splitlines()[0] if header.splitlines() else ""
+
+                print(f"Found Balance Sheet " f"on page {page.number}: {title}")
+
                 balance.append(
                     StatementPage(
                         statement_type="balance_sheet",
@@ -90,13 +115,11 @@ class FinancialStatementExtractor:
                 header,
                 self.keywords["cash_flow"],
             ):
-               
-                title = header.splitlines()[0]
 
-                print(
-                     f"Found Cash Flow Statement"
-                     f"on page {page.number}: {title}"
-)
+                title = header.splitlines()[0] if header.splitlines() else ""
+
+                print(f"Found Cash Flow Statement " f"on page {page.number}: {title}")
+
                 cash.append(
                     StatementPage(
                         statement_type="cash_flow",
