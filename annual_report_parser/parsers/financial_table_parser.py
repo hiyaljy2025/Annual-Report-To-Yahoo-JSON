@@ -19,6 +19,56 @@ class FinancialTableParser:
 
         return re.match(pattern, token) is not None
 
+    def should_keep_line(
+        self,
+        label: str,
+        values: list[str],
+    ) -> bool:
+        """
+        Decide whether a parsed line is a genuine
+        financial row.
+        """
+
+        if not label:
+            return False
+
+        if not values:
+            return False
+
+        label = label.lower().strip()
+
+        ignore = {
+            "fy2025",
+            "fy2024",
+            "fy2023",
+            "change",
+            "%",
+            "s$'000",
+            "s$",
+            "page",
+        }
+
+        if label in ignore:
+            return False
+
+        # Ignore report titles
+        if "annual report" in label:
+            return False
+
+        # Ignore page references
+        if "page" in label:
+            return False
+
+        # Ignore addresses
+        if "industrial park" in label:
+            return False
+
+        # Ignore very short labels
+        if len(label) < 4:
+            return False
+
+        return True
+
     def parse(self, statement_page: StatementPage) -> FinancialTable:
 
         table = FinancialTable(
@@ -43,12 +93,17 @@ class FinancialTableParser:
                 values.insert(0, tokens.pop())
 
             label = " ".join(tokens)
+            print("---------------------------")
+            print(f"Label : {label}")
+            print(f"Values: {values}")
 
-            table.lines.append(
-                FinancialLine(
-                    label=label,
-                    values=values,
+            if self.should_keep_line(label, values):
+
+                table.lines.append(
+                    FinancialLine(
+                        label=label,
+                        values=values,
+                    )
                 )
-            )
 
         return table

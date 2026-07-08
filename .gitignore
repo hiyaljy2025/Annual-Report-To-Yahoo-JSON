@@ -29,3 +29,7 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Visual Studio Code workspace
+
+*.code-workspace
