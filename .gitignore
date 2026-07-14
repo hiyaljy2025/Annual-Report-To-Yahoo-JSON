@@ -8,28 +8,26 @@ __pycache__/
 .venv/
 
 # Input PDFs
-input/
-
-# VS Code
-.vscode/
+input/*.pdf
+!input/.gitkeep
 
 # Generated output
 output/
+
+# VS Code
+.vscode/
+*.code-workspace
 
 # Build artifacts
 dist/
 build/
 *.egg-info/
 
-# Windows
-Thumbs.db
-.
-# macOS
-.DS_Store
-
 # Logs
 *.log
 
-# Visual Studio Code workspace
+# Windows
+Thumbs.db
 
-*.code-workspace
+# macOS
+.DS_Store

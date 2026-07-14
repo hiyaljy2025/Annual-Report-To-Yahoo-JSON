@@ -53,6 +53,23 @@ class FinancialStatementExtractor:
 
         return False
 
+    def calculate_statement_score(
+        self,
+        header: str,
+        keywords: list[str],
+    ) -> int:
+        """
+        Returns a confidence score indicating how likely
+        this page is a financial statement.
+        """
+
+        score = 0
+
+        if self.contains_keyword(header, keywords):
+            score += 5
+
+        return score
+
     def get_page_header(
         self,
         text: str,
